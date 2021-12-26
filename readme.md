@@ -1,8 +1,8 @@
-
-#settings
-
-
-
+# install
+```
+composer require omidzahed/laravel_mc_adapter @dev
+```
+# settings
 ```
 //app.php
 'providers' => [..., \Omidzahed\LaravelMcAdapter\McProvider::class]
@@ -23,12 +23,12 @@
         ]
 ```
 
-#artisan command
+# artisan command
 ```
  php artisan mc:set
 ```
 
-#useage
+# useage
 ```
     $minio=\Illuminate\Support\Facades\Storage::disk("minio");
     
