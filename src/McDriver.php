@@ -13,24 +13,17 @@ class McDriver  implements AdapterInterface
 
     protected $server_symptom="~";
     protected $mc_path;
-    protected $key,$secret,$bucket,$endpoint,$name;
+    protected $bucket,$name;
 
     /**
      * @throws DontFoundMcBinary
      * @throws ProblemInAddAlias
      */
-    public function __construct( $mc_path,$key,$secret,$bucket,$endpoint,$name="main",$auto_add_alias=false )
+    public function __construct($mc_path,$bucket,$name="main")
     {
         $this->mc_path=$mc_path;
-        $this->key=$key;
-        $this->secret=$secret;
         $this->bucket=$bucket;
-        $this->endpoint=$endpoint;
         $this->name=$name;
-        if ($auto_add_alias){
-            $this->testMcPath();
-            $this->setAlias($name,$endpoint,$key,$secret);
-        }
     }
 
     /**
@@ -59,14 +52,14 @@ class McDriver  implements AdapterInterface
         return new \Symfony\Component\Process\Process(explode(" ",$command),null,['PATH' =>$this->mc_path]);
     }
     protected function ls($path=""){
-       $command="mc ls $this->name/$this->bucket/$path --json";
-       $process= $this->getProcess($command);
-       $process->mustRun();
-       $output=$process->getOutput();
-       $data= preg_replace("/{/",",{",$output);
-       $data= preg_replace("/^,{/","{",$data);
-       $data="[$data]";
-       return json_decode($data);
+        $command="mc ls $this->name/$this->bucket/$path --json";
+        $process= $this->getProcess($command);
+        $process->mustRun();
+        $output=$process->getOutput();
+        $data= preg_replace("/{/",",{",$output);
+        $data= preg_replace("/^,{/","{",$data);
+        $data="[$data]";
+        return json_decode($data);
     }
 
     public function write($path, $contents, Config $config)
@@ -190,7 +183,7 @@ class McDriver  implements AdapterInterface
 
     public function setVisibility($path, $visibility)
     {
-      throw new NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public function has($path): array|bool

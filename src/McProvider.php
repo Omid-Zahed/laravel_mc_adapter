@@ -5,6 +5,7 @@ namespace Omidzahed\LaravelMcAdapter;
 use Closure;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Omidzahed\LaravelMcAdapter\Command\McTestCommand;
 use Omidzahed\LaravelMcAdapter\Command\SetMcAliasFromConfigCommand;
 
 class McProvider extends ServiceProvider
@@ -14,12 +15,8 @@ class McProvider extends ServiceProvider
         Storage::extend('mc',function($app, $config){
             $client = new McDriver(
                 $config["mc_path"],
-                $config["key"],
-                $config["secret"],
                 $config["bucket"],
-                $config["endpoint"],
                 $config["alias"],
-                $config["auto_add_alias"]??false
             );
             return new FilesystemMc($client,$config);
         });
@@ -33,7 +30,7 @@ class McProvider extends ServiceProvider
     protected function registerCommands()
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([SetMcAliasFromConfigCommand::class]);
+            $this->commands([SetMcAliasFromConfigCommand::class,McTestCommand::class]);
         }
 
 

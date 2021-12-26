@@ -1,9 +1,9 @@
 # install
-```
+```php
 composer require omidzahed/laravel_mc_adapter @dev
 ```
 # settings
-```
+```php
 //app.php
 'providers' => [..., \Omidzahed\LaravelMcAdapter\McProvider::class]
 
@@ -21,7 +21,7 @@ composer require omidzahed/laravel_mc_adapter @dev
             'endpoint' => "http://minio:9000",
             "auto_add_alias"=>false
         ]
-```
+```php
 
 # artisan command
 ```
@@ -29,7 +29,7 @@ composer require omidzahed/laravel_mc_adapter @dev
 ```
 
 # useage
-```
+```php
     $minio=\Illuminate\Support\Facades\Storage::disk("minio");
     
     //s3 to local
