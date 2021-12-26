@@ -1,0 +1,17 @@
+{
+    "name": "omidzahed/laravel_mc_adapter",
+    "autoload": {
+        "psr-4": {
+            "Omidzahed\\LaravelMcAdapter\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "omid-zahed",
+            "email": "omid98.ir@gmail.com"
+        }
+    ],
+    "require": {
+
+    }
+}
