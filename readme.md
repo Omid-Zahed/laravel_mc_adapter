@@ -21,11 +21,12 @@ composer require omidzahed/laravel_mc_adapter @dev
             'endpoint' => "http://minio:9000",
             "auto_add_alias"=>false
         ]
-```php
+```
 
 # artisan command
 ```
  php artisan mc:set
+ php artisna mc:test
 ```
 
 # useage
