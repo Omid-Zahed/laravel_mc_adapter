@@ -2,6 +2,7 @@
 namespace Omidzahed\LaravelMcAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use Omidzahed\LaravelMcAdapter\contract\Path;
 use Omidzahed\LaravelMcAdapter\Exceptions\DontFoundMcBinary;
 use Omidzahed\LaravelMcAdapter\Exceptions\NotImplementedException;
 use Omidzahed\LaravelMcAdapter\Exceptions\ProblemInAddAlias;
@@ -87,11 +88,20 @@ class McDriver  implements AdapterInterface
         throw new NotImplementedException();
     }
 
-
+    /**
+     * @param Path $from
+     * @param Path $to
+     * @return bool
+     * @throws \Exception
+     */
     public function move($from,$to){
-        if ($from[0]!=$this->server_symptom && $to[0]==$this->server_symptom)return $this->moveLocalToS3($from,$to);
-        if ($from[0]==$this->server_symptom && $to[0]==$this->server_symptom)return $this->moveS3toS3($from,$to);
-        if ($from[0]==$this->server_symptom && $to[0]!=$this->server_symptom)return $this->moveS3toLocal($from,$to);
+        if (!($from instanceof Path) or !($to instanceof Path)){
+            throw new \InvalidArgumentException('$from and $to must be instance of Path');
+        }
+        if ($from->location==Path::$REMOTE and $to->location==Path::$REMOTE)return $this->moveS3toS3($from->path,$to->path);
+        if ($from->location==Path::$LOCAL  and $to->location==Path::$REMOTE)return $this->moveLocalToS3($from->path,$to->path);
+        if ($from->location==Path::$REMOTE and $to->location==Path::$LOCAL)return $this->moveS3toLocal($from->path,$to->path);
+        throw new \Exception("not found move method for this path");
     }
     protected function moveS3toS3($from,$to){
         list($from,$to)=$this->removeServerSymptom($from,$to);
@@ -120,14 +130,18 @@ class McDriver  implements AdapterInterface
     }
 
 
-    public function copy($from, $to)
+    public function copy( $from, $to)
     {
-        if ($from[0]!=$this->server_symptom && $to[0]==$this->server_symptom)return $this->copyLocalTOS3($from,$to);
-        if ($from[0]==$this->server_symptom && $to[0]==$this->server_symptom)return $this->copyS3toS3($from,$to);
-        if ($from[0]==$this->server_symptom && $to[0]!=$this->server_symptom)return $this->copyS3toLocal($from,$to);
+        if (!($from instanceof Path) or !($to instanceof Path)){
+            throw new \InvalidArgumentException('$from and $to must be instance of Path');
+        }
+        if ($from->location==Path::$LOCAL && $to->location==Path::$REMOTE)  return $this->copyLocalToS3($from->path,$to->path);
+        if ($from->location==Path::$REMOTE && $to->location==Path::$REMOTE)  return $this->copyS3ToS3($from->path,$to->path);
+        if ($from->location==Path::$REMOTE && $to->location==Path::$LOCAL)  return $this->copyS3ToLocal($from->path,$to->path);
+        throw new \Exception ("not found copy method for this path");
     }
     protected function copyLocalTOS3($from,$to){
-        list($from,$to)=$this->removeServerSymptom($from,$to);
+
         $command= "mc cp $from ".$this->name."/".$this->bucket."/$to";
         if (is_dir($from)){$command.=" --recursive";}
         $process= $this->getProcess($command) ;
@@ -137,7 +151,7 @@ class McDriver  implements AdapterInterface
 
     }
     protected function copyS3toS3($from,$to){
-        list($from,$to)=$this->removeServerSymptom($from,$to);
+
         $command= "mc cp ".$this->name."/".$this->bucket."/$from ".$this->name."/".$this->bucket."/$to --recursive" ;
         $process= $this->getProcess($command);
         $process->run();
@@ -145,7 +159,7 @@ class McDriver  implements AdapterInterface
 
     }
     protected function copyS3toLocal($from,$to){
-        list($from,$to)=$this->removeServerSymptom($from,$to);
+
         $command= "mc cp ".$this->name."/".$this->bucket."/$from $to --recursive" ;
         $process= $this->getProcess($command);
         $process->run();
