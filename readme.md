@@ -32,15 +32,18 @@ composer require omidzahed/laravel_mc_adapter @dev
 # useage
 ```php
     $minio=\Illuminate\Support\Facades\Storage::disk("minio");
-    
+    $path_local=new Path(Path::$LOCAL,__DIR__."/dd.txt");
+    $path_remote=new Path(Path::$REMOTE,"/omid/dd.txt");
+
     //s3 to local
-      $minio->copy("~/download/aa/",__DIR__."/test")
+    $minio->move($path_remote,$path_local);
+
       
     //s3 to s3 
-    $minio->copy("~/download/aa/","~/main")
-        
+    $minio->move($path_remote,$path_path_remote);
+
     // local to s3
-    $minio->copy(__DIR__."/test","~/download/aa/")
+    $minio->move($path_local,$path_remote);
     
     ```
 
