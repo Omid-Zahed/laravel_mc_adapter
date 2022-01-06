@@ -105,7 +105,6 @@ class McDriver  implements AdapterInterface
 
         $command= "mc mv $from ".$this->name."/".$this->bucket."/$to";
         if (is_dir($from)){$command.=" --recursive";}
-        echo $command;
         $process= $this->getProcess($command) ;
         $process->run();
         return !empty($process->getOutput());
