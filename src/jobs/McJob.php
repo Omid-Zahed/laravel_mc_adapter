@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Laravel\SerializableClosure\SerializableClosure;
-
+use Omidzahed\LaravelMcAdapter\contract\Path;
 
 
 class McJob implements ShouldQueue
@@ -25,7 +25,7 @@ class McJob implements ShouldQueue
     protected array $accept_function=["move","copy"];
 
 
-    public function __construct($type,$from,$to, $disk,$callback)
+    public function __construct($type,Path $from,Path $to, $disk,$callback)
     {
         if (!in_array($type,$this->accept_function))throw new \Exception("accept function is ". join(",",$this->accept_function));
         $this->callback = new SerializableClosure($callback);
