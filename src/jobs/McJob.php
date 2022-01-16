@@ -41,7 +41,7 @@ class McJob implements ShouldQueue
         if (Storage::disk($this->disk)->{$this->type}($this->from,$this->to)){
             $this->callback->getClosure()();
         }else {
-            throw new \Exception("failed in ".$this->type." file from ".$this->from." to ".$this->to." on disk ".$this->disk);
+            throw new \Exception("failed in ".$this->type." file from ".$this->from->path." to ".$this->to->path." on disk ".$this->disk);
         }
     }
 
