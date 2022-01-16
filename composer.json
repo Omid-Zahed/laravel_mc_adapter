@@ -1,5 +1,12 @@
 {
     "name": "omidzahed/laravel_mc_adapter",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Omidzahed\\LaravelMcAdapter\\McProvider"
+            ]
+        }
+    },
     "autoload": {
         "psr-4": {
             "Omidzahed\\LaravelMcAdapter\\": "src/"
