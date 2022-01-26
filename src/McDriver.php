@@ -108,7 +108,11 @@ class McDriver  implements AdapterInterface
         $command= "mc mv ".$this->name."/".$this->bucket."/$from ".$this->name."/".$this->bucket."/$to --recursive";
         $process= $this->getProcess($command) ;
         $process->run();
-        return !empty($process->getOutput());
+         if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
     }
     protected function moveLocalToS3($from,$to){
         list($from,$to)=$this->removeServerSymptom($from,$to);
@@ -117,7 +121,11 @@ class McDriver  implements AdapterInterface
         if (is_dir($from)){$command.=" --recursive";}
         $process= $this->getProcess($command) ;
         $process->run();
-        return !empty($process->getOutput());
+         if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
 
     }
     protected function moveS3toLocal($from,$to){
@@ -125,7 +133,11 @@ class McDriver  implements AdapterInterface
         $command= "mc mv ".$this->name."/".$this->bucket."/$from $to --recursive";
         $process= $this->getProcess($command) ;
         $process->run();
-        return !empty($process->getOutput());
+         if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
 
     }
 
@@ -146,16 +158,22 @@ class McDriver  implements AdapterInterface
         if (is_dir($from)){$command.=" --recursive";}
         $process= $this->getProcess($command) ;
         $process->run();
-        return !empty($process->getOutput());
-
-
+        if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
     }
     protected function copyS3toS3($from,$to){
 
         $command= "mc cp ".$this->name."/".$this->bucket."/$from ".$this->name."/".$this->bucket."/$to --recursive" ;
         $process= $this->getProcess($command);
         $process->run();
-        return !empty($process->getOutput());
+         if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
 
     }
     protected function copyS3toLocal($from,$to){
@@ -163,7 +181,11 @@ class McDriver  implements AdapterInterface
         $command= "mc cp ".$this->name."/".$this->bucket."/$from $to --recursive" ;
         $process= $this->getProcess($command);
         $process->run();
-        return !empty($process->getOutput());
+         if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
     }
 
 
@@ -175,7 +197,11 @@ class McDriver  implements AdapterInterface
         $command= "mc rm ".$this->name."/".$this->bucket."/$path";
         $process= $this->getProcess($command) ;
         $process->run();
-        return !empty($process->getOutput());
+         if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
     }
 
     public function deleteDir($dirname)
@@ -186,7 +212,11 @@ class McDriver  implements AdapterInterface
         $command= "mc rm ".$this->name."/".$this->bucket."/$dirname --recursive --force";
         $process= $this->getProcess($command) ;
         $process->run();
-        return !empty($process->getOutput());
+         if($process->isSuccessful()){
+            return true;
+        }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+        }
     }
 
     public function createDir($dirname, Config $config)
