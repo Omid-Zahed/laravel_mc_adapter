@@ -50,7 +50,9 @@ class McDriver  implements AdapterInterface
 
     protected function getProcess($command): Process
     {
-        return new \Symfony\Component\Process\Process(explode(" ",$command),null,['PATH' =>$this->mc_path]);
+        $p=new \Symfony\Component\Process\Process(explode(" ",$command),null,['PATH' =>$this->mc_path]);
+        $p->setTimeout(\config("mcDriver.process_timout",60));
+        return $p;
     }
     protected function ls($path=""){
         $command="mc ls $this->name/$this->bucket/$path --json";
@@ -133,10 +135,10 @@ class McDriver  implements AdapterInterface
         $command= "mc mv ".$this->name."/".$this->bucket."/$from $to --recursive";
         $process= $this->getProcess($command) ;
         $process->run();
-         if($process->isSuccessful()){
+        if($process->isSuccessful()){
             return true;
         }else{
-            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+            throw new \Exception($process->getErrorOutput()." --- ".$process->getOutput());
         }
 
     }
@@ -181,7 +183,7 @@ class McDriver  implements AdapterInterface
         $command= "mc cp ".$this->name."/".$this->bucket."/$from $to --recursive" ;
         $process= $this->getProcess($command);
         $process->run();
-         if($process->isSuccessful()){
+        if($process->isSuccessful()){
             return true;
         }else{
             throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
@@ -197,7 +199,7 @@ class McDriver  implements AdapterInterface
         $command= "mc rm ".$this->name."/".$this->bucket."/$path";
         $process= $this->getProcess($command) ;
         $process->run();
-         if($process->isSuccessful()){
+        if($process->isSuccessful()){
             return true;
         }else{
             throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
@@ -212,7 +214,7 @@ class McDriver  implements AdapterInterface
         $command= "mc rm ".$this->name."/".$this->bucket."/$dirname --recursive --force";
         $process= $this->getProcess($command) ;
         $process->run();
-         if($process->isSuccessful()){
+        if($process->isSuccessful()){
             return true;
         }else{
             throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 

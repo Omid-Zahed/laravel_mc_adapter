@@ -32,6 +32,7 @@ class McProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([SetMcAliasFromConfigCommand::class,McTestCommand::class]);
         }
+        $this->mergeConfigFrom(__DIR__.'/../config/mcDriver.php', 'mcDriver');
 
 
     }
