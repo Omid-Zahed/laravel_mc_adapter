@@ -25,6 +25,10 @@ class McProvider extends ServiceProvider
     public function register()
     {
         $this->registerCommands();
+        $this->publishes([
+            __DIR__.'/../config/mcDriver.php' => \config_path('mcDriver.php'),
+        ]);
+        $this->mergeConfigFrom(__DIR__.'/../config/mcDriver.php', 'mcDriver');
     }
 
     protected function registerCommands()
@@ -32,7 +36,7 @@ class McProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([SetMcAliasFromConfigCommand::class,McTestCommand::class]);
         }
-        $this->mergeConfigFrom(__DIR__.'/../config/mcDriver.php', 'mcDriver');
+
 
 
     }
