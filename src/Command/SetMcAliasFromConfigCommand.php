@@ -50,8 +50,16 @@
             $command="mc alias set $alias $endpoint $key $secret --api $api";
             $process=$this->getProcess($command,$mc_path);
             $process->run();
-            if (empty($process->getOutput()))throw new ProblemInAddAlias("can not creat alias $name");
-            echo ("desk :$name\nalias: $alias \nendpoint: $endpoint \n------------\n");
+         
+         
+           if($process->isSuccessful()){
+             echo ("desk :$name\nalias: $alias \nendpoint: $endpoint \n------------\n");;
+           }else{
+            throw new \Exception($process->getErrorOutput()." => mc run output: ".$process->getOutput()); 
+           }
+         
+            
+          
 
         }
     }
