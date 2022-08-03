@@ -30,7 +30,8 @@ class McJob implements ShouldQueue
     {
         if (!in_array($type,$this->accept_function))throw new \Exception("accept function is ". join(",",$this->accept_function));
         $this->callback = new SerializableClosure($callback);
-        $this->callback_on_fail = new SerializableClosure($callback_on_fail);
+        //if is clouser
+        if ($callback_on_fail) $this->callback_on_fail = new SerializableClosure($callback_on_fail);
         $this->from = $from;
         $this->to = $to;
         $this->disk = $disk;
