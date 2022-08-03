@@ -17,7 +17,7 @@ class McDriverMock implements AdapterInterface
         try {
             $function=$this->functions[$func_name][array_key_first($this->functions[$func_name])];
             array_shift($this->functions[$func_name]);
-             $function(...$args);
+             return $function(...$args);
         }catch (\Exception $e){
           return false;
         }
