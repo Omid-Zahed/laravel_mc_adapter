@@ -18,6 +18,7 @@ class McJob implements ShouldQueue
 
 
     protected $callback;
+    protected $callback_on_fail;
     protected $from;
     protected $to;
     protected $disk;
@@ -25,10 +26,11 @@ class McJob implements ShouldQueue
     protected array $accept_function=["move","copy"];
 
 
-    public function __construct($type,Path $from,Path $to, $disk,$callback)
+    public function __construct($type,Path $from,Path $to, $disk,$callback,$callback_on_fail=null)
     {
         if (!in_array($type,$this->accept_function))throw new \Exception("accept function is ". join(",",$this->accept_function));
         $this->callback = new SerializableClosure($callback);
+        $this->callback_on_fail = new SerializableClosure($callback_on_fail);
         $this->from = $from;
         $this->to = $to;
         $this->disk = $disk;
@@ -43,6 +45,12 @@ class McJob implements ShouldQueue
         }else {
             throw new \Exception("failed in ".$this->type." file from ".$this->from->path." to ".$this->to->path." on disk ".$this->disk);
         }
+    }
+    public function failed(\Exception $exception)
+    {
+        if($this->callback_on_fail) $this->callback_on_fail->getClosure()();
+        else throw $exception;
+
     }
 
 
