@@ -53,6 +53,10 @@ class McDriverMock implements AdapterInterface
     {
        return $this->call_function("copy",[$path,$newpath]);
     }
+    public function move($path, $newpath)
+    {
+        return $this->call_function("move",[$path,$newpath]);
+    }
 
     public function delete($path)
     {
