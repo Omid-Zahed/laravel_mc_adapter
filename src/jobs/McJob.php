@@ -50,7 +50,7 @@ class McJob implements ShouldQueue
     public function failed( $exception=null)
     {
         if($this->callback_on_fail) $this->callback_on_fail->getClosure()();
-        if($exception instanceof \Exception $exception) throw $exception;
+        if($exception instanceof \Exception ) throw $exception;
         else throw new \Exception("failed in ".$this->type." file from ".$this->from->path." to ".$this->to->path." on disk ".$this->disk);
 
 
