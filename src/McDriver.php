@@ -107,7 +107,7 @@ class McDriver  implements AdapterInterface
     }
     protected function moveS3toS3($from,$to){
         list($from,$to)=$this->removeServerSymptom($from,$to);
-        $command= "mc mv ".$this->name."/".$this->bucket."/$from ".$this->name."/".$this->bucket."/$to --recursive";
+        $command= "mc --debug mv ".$this->name."/".$this->bucket."/$from ".$this->name."/".$this->bucket."/$to --recursive";
         $process= $this->getProcess($command) ;
         $process->run();
          if($process->isSuccessful()){
@@ -119,7 +119,7 @@ class McDriver  implements AdapterInterface
     protected function moveLocalToS3($from,$to){
         list($from,$to)=$this->removeServerSymptom($from,$to);
 
-        $command= "mc mv $from ".$this->name."/".$this->bucket."/$to";
+        $command= "mc --debug mv $from ".$this->name."/".$this->bucket."/$to";
         if (is_dir($from)){$command.=" --recursive";}
         $process= $this->getProcess($command) ;
         $process->run();
@@ -132,7 +132,7 @@ class McDriver  implements AdapterInterface
     }
     protected function moveS3toLocal($from,$to){
         list($from,$to)=$this->removeServerSymptom($from,$to);
-        $command= "mc mv ".$this->name."/".$this->bucket."/$from $to --recursive";
+        $command= "mc --debug mv ".$this->name."/".$this->bucket."/$from $to --recursive";
         $process= $this->getProcess($command) ;
         $process->run();
         if($process->isSuccessful()){
@@ -156,7 +156,7 @@ class McDriver  implements AdapterInterface
     }
     protected function copyLocalTOS3($from,$to){
 
-        $command= "mc cp $from ".$this->name."/".$this->bucket."/$to";
+        $command= "mc --debug cp $from ".$this->name."/".$this->bucket."/$to";
         if (is_dir($from)){$command.=" --recursive";}
         $process= $this->getProcess($command) ;
         $process->run();
@@ -168,7 +168,7 @@ class McDriver  implements AdapterInterface
     }
     protected function copyS3toS3($from,$to){
 
-        $command= "mc cp ".$this->name."/".$this->bucket."/$from ".$this->name."/".$this->bucket."/$to --recursive" ;
+        $command= "mc --debug cp ".$this->name."/".$this->bucket."/$from ".$this->name."/".$this->bucket."/$to --recursive" ;
         $process= $this->getProcess($command);
         $process->run();
          if($process->isSuccessful()){
@@ -180,7 +180,7 @@ class McDriver  implements AdapterInterface
     }
     protected function copyS3toLocal($from,$to){
 
-        $command= "mc cp ".$this->name."/".$this->bucket."/$from $to --recursive" ;
+        $command= "mc --debug cp ".$this->name."/".$this->bucket."/$from $to --recursive" ;
         $process= $this->getProcess($command);
         $process->run();
         if($process->isSuccessful()){
